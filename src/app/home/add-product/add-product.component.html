@@ -1,0 +1,250 @@
+<div class="content-page">
+  <!-- Start content -->
+  <div class="content">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="page-title-box">
+            <h4 class="page-title">إضافة منتج</h4>
+
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+      <!-- end row -->
+      <form class="form-horizontal" role="form" #addProductForm="ngForm">
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card-box">
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="p-20">
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="productName">إسم المنتج<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="productName" #productNameControl="ngModel"
+                          required [(ngModel)]="currentProduct.name" (blur)="checkIfProductExist()">
+
+                        <ul class="parsley-errors-list filled">
+                          <li
+                            *ngIf="productNameControl.errors?.required && (productNameControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+                          <li *ngIf="ExistedProductFalg == true">
+                            هذا المنتج موجود من قبل</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="productPriceBefore">السعر قبل</label>
+                      <div class="col-md-4">
+                        <input type="number" class="form-control" name="productPriceBefore"
+                          #productPriceBeforeControl="ngModel" [(ngModel)]="currentProduct.priceBefore">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="productPriceAfter">السعر بعد<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="productPriceAfter"
+                          #productPriceAfterControl="ngModel" required [(ngModel)]="currentProduct.priceAfter">
+
+                        <ul class="parsley-errors-list filled">
+                          <li
+                            *ngIf="productPriceAfterControl.errors?.required && (productPriceAfterControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="productDescription">الوصف<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <textarea type="text" class="form-control" name="productDescription"
+                          #productDescriptionControl="ngModel" required
+                          [(ngModel)]="currentProduct.description"></textarea>
+
+                        <ul class="parsley-errors-list filled">
+                          <li
+                            *ngIf="productDescriptionControl.errors?.required && (productDescriptionControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="productCategory">القسم<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <select class="form-control" name="productCategory" required
+                          [(ngModel)]="currentProduct.categoryID" #productCategoryControl="ngModel">
+                          <option [ngValue]="undefiend" selected>إختر</option>
+                          <option *ngFor="let category of categories" [value]="category.ID">
+                            {{category.name}}</option>
+                        </select>
+                        <ul class="parsley-errors-list filled">
+                          <li
+                            *ngIf="productCategoryControl.errors?.required && (productCategoryControl.dirty || saveForm == true)">
+                            يجب إختيار هذا الحقل</li>
+                        </ul>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="row">
+                        <label class="col-md-2 control-label" for="productImage">صور المنتج<span class="text-danger">
+                            *</span></label>
+                        <div class="col-md-4">
+                          <input type="file" class="form-control" multiple
+                            (change)="handleFilesToUpload($event.target.files)" name="productImage"
+                            #productImagesControl="ngModel" [(ngModel)]="images" required>
+                          <ul class="parsley-errors-list filled">
+                            <li
+                              *ngIf="productImagesControl.errors?.required && (productImagesControl.dirty || saveForm == true)">
+                              يجب إختيار الصور</li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div class="row m-t-10">
+                        <div class="row">
+                          <div class="col-md-offset-2 col-md-9">
+                            <div class="row">
+                              <div class="col-md-3 m-l-15" *ngFor="let image of currentProduct.images">
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                  <div class="fileupload-new thumbnail" style="min-width: 200px; min-height: 150px;">
+                                    <img [src]="image" alt="image" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="row" *ngIf="saveForm == true ">
+                          <div class="col-md-offset-2 col-md-9 fileupload-preview fileupload-exists thumbnail"
+                            style="line-height: 20px;"></div>
+                        </div>
+
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="card-box">
+              <h4 class="m-t-0 header-title"><b>خصائص المنتج</b></h4>
+              <br />
+
+              <div class="form-group" *ngIf="showOptionForm == false">
+                <button id="demo-btn-addrow" class="btn btn-default m-b-20" (click)="addNewOption()"><i
+                    class="fa fa-plus m-r-5"></i>إضافة
+                  جديد</button>
+              </div>
+
+              <form class="form-horizontal" role="form" #addOptionForm="ngForm" *ngIf="showOptionForm == true">
+
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="productOption">الوصف<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <textarea type="text" class="form-control" name="productOption" #productOptionControl="ngModel"
+                          required [(ngModel)]="currentOption.optionText"></textarea>
+
+                        <ul class="parsley-errors-list filled">
+                          <li
+                            *ngIf="productOptionControl.errors?.required && (productOptionControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+
+                          <li *ngIf="repeatedOptionFlag == true">
+                            هذا الوصف موجود من قبل</li>
+
+                        </ul>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                      <div class="col-sm-8 col-sm-offset-5">
+                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                          [disabled]="addOptionForm.invalid" (click)="saveOption(addOptionForm)">حفظ</button>
+
+                        <button class="btn btn-default waves-effect m-l-5" (click)="cancelOption()">
+                          إلغاء
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+
+
+              <div class="table-responsive" *ngIf="currentProduct.ProductOptions.length > 0">
+                <table class="table m-0 table-colored table-success">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>الوصف</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let option of currentProduct.ProductOptions;let i = index">
+                      <th scope="row">{{i + 1}}</th>
+                      <td class="col-sm-6">{{option.optionText}}</td>
+                      <td>
+                        <button class="demo-delete-row btn btn-danger btn-xs btn-icon fa fa-refresh" (click)="updateOption(i)"></button>
+                        <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times" (click)="deleteOption(i)"></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card-box">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <div class="col-sm-8 col-sm-offset-5">
+                      <button type="button" class="btn btn-primary waves-effect waves-light" (click)="saveChanges(addProductForm)"
+                        [disabled]="addProductForm.invalid || (ExistedProductFalg == true)">حفظ</button>
+
+                      <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
+                        إلغاء
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+      </form>
+
+
+    </div>
+
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -23,9 +23,21 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/sweetalert2/dist/sweetalert2.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/modernizr.min.js",
+              "src/assets/js/jquery.min.js",
+              "src/assets/js/bootstrap.min.js",
+              "src/assets/js/wow.min.js",
+              "src/assets/js/metisMenu.min.js",
+              "src/assets/js/waves.js",
+              "src/assets/js/jquery.slimscroll.js",
+              "src/assets/js/jquery.core.js",
+              "src/assets/js/jquery.app.js",
+              "node_modules/sweetalert2/dist/sweetalert2.all.min.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {
