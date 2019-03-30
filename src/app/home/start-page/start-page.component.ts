@@ -1,5 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { DynamicScriptLoaderService} from 'src/app/services/dynamic-script-loader-service.service';
+import { CookieService } from 'ngx-cookie';
 
 
 @Component({
@@ -9,13 +10,13 @@ import { DynamicScriptLoaderService} from 'src/app/services/dynamic-script-loade
 })
 export class StartPageComponent implements AfterViewInit {
 
-  constructor(private dynamicScriptLoader: DynamicScriptLoaderService) { }
+  constructor(private dynamicScriptLoader: DynamicScriptLoaderService,private cookieService:CookieService) { }
 
   ngAfterViewInit() { 
 
     this.dynamicScriptLoader.intializeJqueryCore();
     this.dynamicScriptLoader.intializeJqueryApp();
-    
+    console.log(this.cookieService.get("userData"));
   }
 
 }

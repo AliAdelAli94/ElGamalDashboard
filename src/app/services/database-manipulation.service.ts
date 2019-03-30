@@ -3,6 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from '../models/category.model';
 import { AppSettings } from '../AppSettings';
+import { Product } from '../models/product.model';
+import { DeleteProductDTO } from '../models/DeleteProductDTO.model';
+import { UserDTO } from '../models/UserDTO.model';
+import { RegisterDTO } from '../models/RegisterDTO.model';
 
 
 @Injectable({
@@ -16,6 +20,10 @@ export class DatabaseManipulationService {
     return this.httpClient.get<Category[]>(AppSettings.webApiUrl + "category/getallcategories");
   }
 
+  getProducts(): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(AppSettings.webApiUrl + "Product/GetAllProducts");
+  }
+
   addCategory(Category): Observable<any> {
 
     return this.httpClient.post(AppSettings.webApiUrl + "Category/AddCategory/", Category, {
@@ -25,22 +33,24 @@ export class DatabaseManipulationService {
     });
   }
 
-  uploadImages(folderName: string, filesToUpload: FileList): Observable<any> {
+  uploadImages(folderName: string, filesToUpload: FileList, editMode: string, oldImagesUrls: string[]): Observable<any> {
     let formData: FormData = new FormData();
+    formData.append("EditMode", editMode);
     formData.append("FolderName", folderName);
+    formData.append("oldImagesUrls", (oldImagesUrls != null) ? oldImagesUrls.join(';') : null);
+
     for (let x = 0; x < filesToUpload.length; x++) {
       formData.append("Files[]", filesToUpload[x], filesToUpload[x].name);
     }
-
-    return this.httpClient.post(AppSettings.webApiUrl +  "Utils/UploadImages/",formData);
+    return this.httpClient.post(AppSettings.webApiUrl + "Utils/UploadImages/", formData);
   }
 
-  checkIfProductExist(productName:string):Observable<number>{
-    return this.httpClient.get<number>(AppSettings.webApiUrl + "Product/CheckIfProductExits/"+productName);
+  checkIfProductExist(productName: string): Observable<number> {
+    return this.httpClient.get<number>(AppSettings.webApiUrl + "Product/CheckIfProductExits/" + productName);
   }
 
 
-  addProduct(item:any): Observable<any> {
+  addProduct(item: any): Observable<any> {
 
     return this.httpClient.post(AppSettings.webApiUrl + "Product/AddProduct/", item, {
       headers: new HttpHeaders({
@@ -48,5 +58,61 @@ export class DatabaseManipulationService {
       })
     });
   }
+
+
+  editProduct(item: Product): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "Product/EditProduct/", item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+
+  deleteProduct(item: any): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "Product/DeleteProduct/", item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+
+  login(item: any): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "User/Login/", item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  GetAllUsers(): Observable<UserDTO[]> {
+    return this.httpClient.get<UserDTO[]>(AppSettings.webApiUrl + "User/GetAllUsers");
+  }
+
+
+  registerUser(item: RegisterDTO): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "User/RegisterUser/", item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+
+  deleteUser(item: string): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "User/DeleteUser/"+item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+
 
 }

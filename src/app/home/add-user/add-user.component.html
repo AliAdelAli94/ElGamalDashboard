@@ -1,0 +1,155 @@
+<div class="content-page">
+  <!-- Start content -->
+  <div class="content">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="page-title-box">
+            <h4 class="page-title">إضافة مستخدم</h4>
+
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+      <!-- end row -->
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card-box">
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="p-20">
+                  <form class="form-horizontal" role="form" #addUserForm="ngForm">
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userName">الإسم<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="userName" [(ngModel)]="currentUser.userName"
+                          #userNameControl="ngModel" required>
+
+                        <ul class="parsley-errors-list filled">
+                          <li *ngIf="userNameControl.errors?.required && (userNameControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userEmail">الإيميل<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <input type="email" class="form-control" name="userEmail" [(ngModel)]="currentUser.email"
+                          #userEmailControl="ngModel" required email>
+
+                        <ul class="parsley-errors-list filled">
+                          <li *ngIf="userEmailControl.errors?.required && (userEmailControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+
+                          <li *ngIf="userEmailControl.errors?.email && (userEmailControl.dirty || saveForm == true)">
+                            يجب إدخال إيميل صحيح </li>
+                        </ul>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userPassword">الباسورد<span class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="userPassword" [(ngModel)]="currentUser.password"
+                          #userPasswordControl="ngModel" required>
+
+                        <ul class="parsley-errors-list filled">
+
+                          <li
+                            *ngIf="userPasswordControl.errors?.required && (userPasswordControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userConfirmPassword">تأكيد الباسورد<span
+                          class="text-danger">
+                          *</span></label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="userConfirmPassword"
+                          [(ngModel)]="currentUser.confirmPassword" #userConfirmPasswordControl="ngModel" (input)="checkPasswords()" required>
+
+                        <ul class="parsley-errors-list filled">
+
+                          <li
+                            *ngIf="userConfirmPasswordControl.errors?.required && (userConfirmPasswordControl.dirty || saveForm == true)">
+                            يجب إدخال هذا الحقل</li>
+
+                            <li
+                            *ngIf="passwordNotMatchFlag == true">
+                              الباسورد و تأكيد الباسورد غير متطابقان</li>
+
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userPhoneNumber">الهاتف</label>
+                      <div class="col-md-4">
+                        <input type="text" class="form-control" name="userPhoneNumber"
+                          [(ngModel)]="currentUser.phoneNumber" #userPhoneNumberControl="ngModel">
+                      </div>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userAddress">العنوان</label>
+                      <div class="col-md-4">
+                        <textarea type="text" class="form-control" name="userAddress" [(ngModel)]="currentUser.address"
+                          #userAddressControl="ngModel"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-md-2 control-label" for="userBirthDate">تاريخ الميلاد</label>
+                      <div class="col-md-4">
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="birthDatePicker" name="userBirthDate"
+                            [(ngModel)]="currentUser.birthDate" #userBirthDateControl="ngModel">
+                          <span class="input-group-addon bg-custom b-0"><i
+                              class="mdi mdi-calendar text-white"></i></span>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                      <div class="col-sm-8 col-sm-offset-8">
+                        <button type="button" class="btn btn-primary waves-effect waves-light" (click)="addUser()"
+                          [disabled]="addUserForm.invalid  || passwordNotMatchFlag == true">حفظ</button>
+
+                        <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
+                          إلغاء
+                        </button>
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+
+            </div>
+            <!-- end row -->
+
+          </div> <!-- end card-box -->
+        </div><!-- end col -->
+      </div>
+      <!-- end row -->
+
+    </div> <!-- container -->
+
+  </div> <!-- content -->
+
+  <app-footer></app-footer>
+</div>

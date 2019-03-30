@@ -104,13 +104,12 @@
                             *</span></label>
                         <div class="col-md-4">
                           <input type="file" class="form-control" multiple
-                            (change)="handleFilesToUpload($event.target.files)" name="productImage"
-                            #productImagesControl="ngModel" [(ngModel)]="images" required>
-                          <ul class="parsley-errors-list filled">
-                            <li
-                              *ngIf="productImagesControl.errors?.required && (productImagesControl.dirty || saveForm == true)">
-                              يجب إختيار الصور</li>
-                          </ul>
+                            (change)="handleFilesToUpload($event.target.files)" name="productImage" required>
+                            <ul class="parsley-errors-list filled">
+                              <li
+                                *ngIf="fireProductDocumentsFlag == true">
+                                يجب إختيار الصور</li>
+                            </ul>
                         </div>
                       </div>
 
@@ -121,7 +120,7 @@
                               <div class="col-md-3 m-l-15" *ngFor="let image of currentProduct.images">
                                 <div class="fileupload fileupload-new" data-provides="fileupload">
                                   <div class="fileupload-new thumbnail" style="min-width: 200px; min-height: 150px;">
-                                    <img [src]="image" alt="image" />
+                                    <img [src]="(image.imageUrl) ? image.imageUrl : image" alt="image" />
                                   </div>
                                 </div>
                               </div>
@@ -219,13 +218,44 @@
               </div>
             </div>
 
+
+            <div class="card-box" *ngIf="editableMode == true && currentProduct.Comments.length > 0">
+              <h4 class="m-t-0 header-title"><b>التعليقات و االتقييمات</b></h4>
+              <br />
+
+              <div class="table-responsive">
+                <table class="table m-0 table-colored table-success">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>التعليق</th>
+                      <th>إسم المستخدم</th>
+                      <th>التقييم</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let comment of currentProduct.Comments;let i = index">
+                      <th scope="row">{{i + 1}}</th>
+                      <td class="col-sm-5">{{comment.commentText}}</td>
+                      <td class="col-sm-3">{{comment.userName}}</td>
+                      <td class="col-sm-2">{{comment.ratingValue}}</td>
+                      <td>
+                        <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times" (click)="deleteComment(i)"></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div class="card-box">
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group row">
                     <div class="col-sm-8 col-sm-offset-5">
-                      <button type="button" class="btn btn-primary waves-effect waves-light" (click)="saveChanges(addProductForm)"
-                        [disabled]="addProductForm.invalid || (ExistedProductFalg == true)">حفظ</button>
+                      <button type="button" class="btn btn-primary waves-effect waves-light" (click)="(editableMode == true)? editProduct(addProductForm) : saveChanges(addProductForm)"
+                        [disabled]="addProductForm.invalid || (ExistedProductFalg == true) || (fireProductDocumentsFlag == true || currentProduct.images.length == 0)">حفظ</button>
 
                       <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
                         إلغاء
