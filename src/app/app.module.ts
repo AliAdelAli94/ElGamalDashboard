@@ -20,6 +20,7 @@ import { EditViewProductService } from './services/edit-view-product.service';
 import { ViewUsersComponent } from './home/view-users/view-users.component';
 import { CookieModule } from 'ngx-cookie';
 import { AddUserComponent } from './home/add-user/add-user.component';
+import { AuthGuard } from './auth.guard';
 
 
 @NgModule({
@@ -45,7 +46,7 @@ import { AddUserComponent } from './home/add-user/add-user.component';
     FormsModule,
     CookieModule.forRoot()
   ],
-  providers: [DynamicScriptLoaderService, DatabaseManipulationService,EditViewProductService],
+  providers: [DynamicScriptLoaderService, DatabaseManipulationService,EditViewProductService,AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

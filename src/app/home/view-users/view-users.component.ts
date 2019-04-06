@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserDTO } from 'src/app/models/UserDTO.model';
 import { DatabaseManipulationService } from 'src/app/services/database-manipulation.service';
 import { Router } from '@angular/router';
+import { DynamicScriptLoaderService } from 'src/app/services/dynamic-script-loader-service.service';
 
 declare var $ : any;
 declare var swal : any;
@@ -14,7 +15,7 @@ declare var swal : any;
 export class ViewUsersComponent implements OnInit {
 
   constructor(private router: Router,
-    private databaseManipulationService: DatabaseManipulationService) { }
+    private databaseManipulationService: DatabaseManipulationService,private dynamicScriptLoaderService : DynamicScriptLoaderService) { }
 
   users : UserDTO[] = new Array();
 
@@ -96,6 +97,7 @@ export class ViewUsersComponent implements OnInit {
         confirmButtonText: 'حذف'
       }).then((result) => {
         if (result.value) {
+          this.dynamicScriptLoaderService.showSpinner();
           this.databaseManipulationService.deleteUser(userID).subscribe(response => {
             if (response == 0) {
               
@@ -111,6 +113,8 @@ export class ViewUsersComponent implements OnInit {
                   showConfirmButton: false,
                 });
               }
+          },()=>{},()=>{
+            this.dynamicScriptLoaderService.hideSpinner();
           });
         }
       });
@@ -121,11 +125,14 @@ export class ViewUsersComponent implements OnInit {
 
   getAllUsers() {
 
+    this.dynamicScriptLoaderService.showSpinner();
     this.databaseManipulationService.GetAllUsers().subscribe(response => {
 
       this.users = response;
       this.intializeUserDatatableConfiguration(this);
 
+    },()=>{},()=>{
+      this.dynamicScriptLoaderService.hideSpinner();
     });
   }
 

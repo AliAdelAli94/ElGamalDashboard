@@ -2,8 +2,9 @@ import { Component, AfterViewInit, OnInit, ViewChild } from '@angular/core';
 import { DynamicScriptLoaderService } from 'src/app/services/dynamic-script-loader-service.service';
 import { DatabaseManipulationService } from 'src/app/services/database-manipulation.service';
 import { Category } from 'src/app/models/category.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { EditViewCategoryService } from 'src/app/services/edit-view-category.service';
 
 
 declare var swal: any;
@@ -20,14 +21,26 @@ export class AddCategoryComponent implements AfterViewInit, OnInit {
   currentCategory: Category = new Category();
   saveForm: boolean;
   undefiend : any;
+  routedID: string;
+  editableMode: boolean = false;
 
-  constructor(private dynamicScriptLoader: DynamicScriptLoaderService, private databaseManipulationService: DatabaseManipulationService, private router: Router) {
+
+  constructor(private dynamicScriptLoader: DynamicScriptLoaderService, 
+    private databaseManipulationService: DatabaseManipulationService, private router: Router,
+    private activatedRoute: ActivatedRoute,private editViewCategoryService :EditViewCategoryService) {
     this.saveForm = false;
   }
 
   ngOnInit() {
 
     this.getAllCategories();
+    this.routedID = this.activatedRoute.snapshot.paramMap.get("id");
+    if (this.editViewCategoryService.EditedCategory) {
+      if (this.editViewCategoryService.EditedCategory.ID == this.routedID) {
+        this.currentCategory = this.editViewCategoryService.EditedCategory;
+        this.editableMode = true;
+      }
+    }
   }
 
   ngAfterViewInit() {
@@ -40,6 +53,7 @@ export class AddCategoryComponent implements AfterViewInit, OnInit {
   addCategory() {
     this.saveForm = true;
     if (this.currentCategory) {
+      this.dynamicScriptLoader.showSpinner();
       this.databaseManipulationService.addCategory(this.currentCategory).subscribe((response) => {
         if (response == 0) {
 
@@ -70,7 +84,35 @@ export class AddCategoryComponent implements AfterViewInit, OnInit {
             }
           );
         }
+      },()=>{},()=>{
+        this.dynamicScriptLoader.hideSpinner();
       })
+    }
+  }
+
+  editCategory() {
+    this.saveForm = true;
+
+    if (this.currentCategory) {
+      this.dynamicScriptLoader.showSpinner();
+      this.databaseManipulationService.editCategory(this.currentCategory).subscribe(response => {
+
+        if (response == 0) {
+          swal.fire(
+            {
+              title: "تم بنجاح",
+              text: "لقد تم تعديل القسم",
+              type: "success",
+              confirmButtonColor: '#4fa7f3',
+              showConfirmButton: false,
+            }
+          );
+          this.saveForm = false;
+          this.router.navigateByUrl('/home/view-categories');
+        }
+      },()=>{},()=>{
+        this.dynamicScriptLoader.hideSpinner();
+      });
     }
   }
 
@@ -80,8 +122,11 @@ export class AddCategoryComponent implements AfterViewInit, OnInit {
 
   getAllCategories() {
 
+    this.dynamicScriptLoader.showSpinner();
     this.databaseManipulationService.getCategories().subscribe(response => {
       this.categories = response;
+    },()=>{},()=>{
+      this.dynamicScriptLoader.hideSpinner();
     });
   }
 

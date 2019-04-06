@@ -8,6 +8,8 @@ import { AddProductComponent } from './home/add-product/add-product.component';
 import { ViewProductsComponent } from './home/view-products/view-products.component';
 import { ViewUsersComponent } from './home/view-users/view-users.component';
 import { AddUserComponent } from './home/add-user/add-user.component';
+import { ViewCategoriesComponent } from './home/view-categories/view-categories.component';
+import { AuthGuard } from './auth.guard';
 
 
 const routes: Routes = [
@@ -16,21 +18,25 @@ const routes: Routes = [
   {
     path: 'home', component: HomeComponent, children: [
 
-      { path: '', redirectTo: 'start-page', pathMatch: 'full' },
+      { path: '', redirectTo: 'start-page', pathMatch: 'full',canActivate: [AuthGuard] },
 
-      { path: 'start-page', component: StartPageComponent },
+      { path: 'start-page', component: StartPageComponent,canActivate: [AuthGuard] },
 
-      { path: 'add-category', component: AddCategoryComponent },
+      { path: 'add-category', component: AddCategoryComponent,canActivate: [AuthGuard] },
 
-      { path: 'add-product', component: AddProductComponent },
+      { path: 'add-product', component: AddProductComponent,canActivate: [AuthGuard] },
 
-      { path: 'edit-product', component: AddProductComponent },
+      { path: 'edit-product', component: AddProductComponent,canActivate: [AuthGuard] },
 
-      { path: 'view-products', component: ViewProductsComponent },
+      { path: 'edit-category', component: AddCategoryComponent,canActivate: [AuthGuard] },
 
-      { path: 'view-users', component: ViewUsersComponent },
+      { path: 'view-products', component: ViewProductsComponent,canActivate: [AuthGuard] },
 
-      { path: 'add-user', component: AddUserComponent }
+      { path: 'view-users', component: ViewUsersComponent,canActivate: [AuthGuard] },
+
+      { path: 'add-user', component: AddUserComponent,canActivate: [AuthGuard] },
+
+      { path: 'view-categories', component:ViewCategoriesComponent,canActivate: [AuthGuard]}
 
 
 

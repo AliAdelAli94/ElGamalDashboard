@@ -62,9 +62,11 @@ export class AddProductComponent implements OnInit, AfterViewInit {
   }
 
   getAllCategories() {
-
+    this.dynamicScriptLoader.showSpinner();
     this.databaseManipulationService.getCategories().subscribe(response => {
       this.categories = response;
+    },()=>{},()=>{
+      this.dynamicScriptLoader.hideSpinner();
     });
   }
 
@@ -92,7 +94,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
 
     if (this.productFiles) {
       if (this.productFiles.length > 0) {
-        this.currentProduct.images
+        this.dynamicScriptLoader.showSpinner();
         this.databaseManipulationService.uploadImages("products", this.productFiles, "true", this.imagesUrlsBeforeEdit).subscribe(response => {
           let temp: Image = new Image();
 
@@ -103,15 +105,31 @@ export class AddProductComponent implements OnInit, AfterViewInit {
           }
 
           this.databaseManipulationService.editProduct(this.currentProduct).subscribe(response => {
-
-            console.log(response);
-
+            if(response == 0){
+              swal.fire(
+                {
+                  title: "تم بنجاح",
+                  text: "لقد تم تعديل المنتج",
+                  type: "success",
+                  confirmButtonColor: '#4fa7f3',
+                  showConfirmButton: false,
+                }
+              );
+              form.reset();
+              this.currentProduct = new Product();
+              this.productImagesModel = null;
+              this.saveForm = false;
+              this.router.navigateByUrl('/home/view-products');
+            }
+          },()=>{},()=>{
+            this.dynamicScriptLoader.hideSpinner();
           });
 
         });
       }
     }
     else {
+      this.dynamicScriptLoader.showSpinner();
       this.databaseManipulationService.editProduct(this.currentProduct).subscribe(response => {
 
         if (response == 0) {
@@ -130,11 +148,14 @@ export class AddProductComponent implements OnInit, AfterViewInit {
           this.saveForm = false;
           this.router.navigateByUrl('/home/view-products');
         }
+      },()=>{},()=>{
+        this.dynamicScriptLoader.hideSpinner();
       });
     }
   }
 
   saveChanges(form: NgForm) {
+    this.dynamicScriptLoader.showSpinner();
     this.saveForm = true;
     this.fireProductDocumentsFlag = (this.currentProduct.images.length == 0) ? true : false;
     let tempImage: Image = new Image();
@@ -163,6 +184,8 @@ export class AddProductComponent implements OnInit, AfterViewInit {
           this.productImagesModel = null;
           this.saveForm = false;
         }
+      },()=>{},()=>{
+        this.dynamicScriptLoader.hideSpinner();
       });
 
     });
@@ -170,6 +193,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
 
   checkIfProductExist() {
     if (this.currentProduct.name) {
+      this.dynamicScriptLoader.showSpinner();
       this.databaseManipulationService.checkIfProductExist(this.currentProduct.name).subscribe(response => {
         if (response == 1) {
           this.ExistedProductFalg = true;
@@ -177,6 +201,8 @@ export class AddProductComponent implements OnInit, AfterViewInit {
         if (response == 0) {
           this.ExistedProductFalg = false;
         }
+      },()=>{},()=>{
+        this.dynamicScriptLoader.hideSpinner();
       });
     }
   }

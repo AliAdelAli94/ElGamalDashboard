@@ -120,7 +120,7 @@ export class ViewProductsComponent implements OnInit, AfterViewInit {
           let deleteProductItem : DeleteProductDTO = new DeleteProductDTO();
           deleteProductItem.productID = productID;
           deleteProductItem.images = this.products.filter(x => x.ID == productID)[0].images.map(x => x.imageUrl);
-
+          this.dynamicScriptLoader.showSpinner();
           this.databaseManipulationService.deleteProduct(deleteProductItem).subscribe(response => {
             if (response == 0) {
               
@@ -136,6 +136,8 @@ export class ViewProductsComponent implements OnInit, AfterViewInit {
                   showConfirmButton: false,
                 });
               }
+          },()=>{},()=>{
+            this.dynamicScriptLoader.hideSpinner();
           });
         }
       });
@@ -151,11 +153,14 @@ export class ViewProductsComponent implements OnInit, AfterViewInit {
 
   getAllProducts() {
 
+    this.dynamicScriptLoader.showSpinner();
     this.databaseManipulationService.getProducts().subscribe(response => {
 
       this.products = response;
       this.intializeProductDatatableConfiguration(this);
 
+    },response => {},()=>{
+      this.dynamicScriptLoader.hideSpinner();
     });
   }
 

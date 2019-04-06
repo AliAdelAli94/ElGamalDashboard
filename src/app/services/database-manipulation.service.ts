@@ -7,6 +7,7 @@ import { Product } from '../models/product.model';
 import { DeleteProductDTO } from '../models/DeleteProductDTO.model';
 import { UserDTO } from '../models/UserDTO.model';
 import { RegisterDTO } from '../models/RegisterDTO.model';
+import { CategoryDTO2 } from '../models/CategoryDTO2.model';
 
 
 @Injectable({
@@ -112,6 +113,30 @@ export class DatabaseManipulationService {
       })
     });
   }
+
+  GetAllCategoriesDashboard(): Observable<CategoryDTO2[]> {
+    return this.httpClient.get<CategoryDTO2[]>(AppSettings.webApiUrl + "Category/GetAllCategoriesDashboard");
+  }
+
+  deleteCategory(item: string): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "Category/DeleteCategory/"+item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  editCategory(item: Category): Observable<any> {
+
+    return this.httpClient.post(AppSettings.webApiUrl + "Category/EditCategory/",item, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  
 
 
 

@@ -28,5 +28,12 @@ export class DynamicScriptLoaderService {
     intializeFirstTimeOnlyHomeFunc();
   }
 
+  showSpinner(){
+    document.getElementById('spinner').style.display = "block";
+  }
+
+  hideSpinner(){
+    document.getElementById('spinner').style.display = "none";
+  }
 
 }

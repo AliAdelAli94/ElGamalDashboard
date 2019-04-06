@@ -3,6 +3,7 @@ import { RegisterDTO } from 'src/app/models/RegisterDTO.model';
 import { Router } from '@angular/router';
 import { DatabaseManipulationService } from 'src/app/services/database-manipulation.service';
 import { NgForm } from '@angular/forms';
+import { DynamicScriptLoaderService } from 'src/app/services/dynamic-script-loader-service.service';
 
 declare var jQuery : any;
 declare var $ : any;
@@ -20,7 +21,7 @@ export class AddUserComponent implements OnInit, AfterViewInit{
   saveForm : boolean = false;
   passwordNotMatchFlag = false;
 
-  constructor( private databaseManipulationService: DatabaseManipulationService, private router: Router) { }
+  constructor( private databaseManipulationService: DatabaseManipulationService, private router: Router,private dynamicScriptLoaderService : DynamicScriptLoaderService) { }
 
   ngOnInit() {
   }
@@ -34,6 +35,7 @@ export class AddUserComponent implements OnInit, AfterViewInit{
     this.currentUser.birthDate =  $("#birthDatePicker").val();
     this.saveForm = true;
     if (this.currentUser) {
+      this.dynamicScriptLoaderService.showSpinner();
       this.databaseManipulationService.registerUser(this.currentUser).subscribe((response) => {
         if (response == 0) {
 
@@ -63,6 +65,8 @@ export class AddUserComponent implements OnInit, AfterViewInit{
             }
           );
         }
+      },()=>{},()=>{
+        this.dynamicScriptLoaderService.hideSpinner();
       })
     }
   }
@@ -85,6 +89,10 @@ export class AddUserComponent implements OnInit, AfterViewInit{
       todayHighlight: true
   });
 
+  }
+
+  cancel(){
+    this.router.navigateByUrl('/home/start-page');
   }
 
 }
