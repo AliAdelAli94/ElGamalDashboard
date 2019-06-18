@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.dynamicScriptLoaderService.showSpinner();
+    this.currentLogin.role = "admin";
     this.databaseManipulationService.login(this.currentLogin).subscribe(response => {
 
       if(response == null)

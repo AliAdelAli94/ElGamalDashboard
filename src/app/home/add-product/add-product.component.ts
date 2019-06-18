@@ -8,6 +8,7 @@ import { Image } from 'src/app/models/image.model';
 import { ProductOption } from 'src/app/models/ProductOption.model';
 import { NgForm } from '@angular/forms';
 import { EditViewProductService } from 'src/app/services/edit-view-product.service';
+import { CheckProductExistDTO } from 'src/app/models/CheckProductExistDTO.model';
 
 declare var swal: any;
 
@@ -194,7 +195,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
   checkIfProductExist() {
     if (this.currentProduct.name) {
       this.dynamicScriptLoader.showSpinner();
-      this.databaseManipulationService.checkIfProductExist(this.currentProduct.name).subscribe(response => {
+      this.databaseManipulationService.checkIfProductExist({ProductName : this.currentProduct.name}).subscribe(response => {
         if (response == 1) {
           this.ExistedProductFalg = true;
         }

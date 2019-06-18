@@ -126,7 +126,8 @@ export class ViewUsersComponent implements OnInit {
   getAllUsers() {
 
     this.dynamicScriptLoaderService.showSpinner();
-    this.databaseManipulationService.GetAllUsers().subscribe(response => {
+    let role = "admin";
+    this.databaseManipulationService.GetAllUsers(role).subscribe(response => {
 
       this.users = response;
       this.intializeUserDatatableConfiguration(this);

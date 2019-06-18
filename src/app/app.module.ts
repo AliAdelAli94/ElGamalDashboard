@@ -21,6 +21,7 @@ import { ViewUsersComponent } from './home/view-users/view-users.component';
 import { CookieModule } from 'ngx-cookie';
 import { AddUserComponent } from './home/add-user/add-user.component';
 import { AuthGuard } from './auth.guard';
+import { ViewOrdersComponent } from './home/view-orders/view-orders.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { AuthGuard } from './auth.guard';
     ViewProductsComponent,
     ViewCategoriesComponent,
     ViewUsersComponent,
-    AddUserComponent
+    AddUserComponent,
+    ViewOrdersComponent
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,7 @@ import { DeleteProductDTO } from '../models/DeleteProductDTO.model';
 import { UserDTO } from '../models/UserDTO.model';
 import { RegisterDTO } from '../models/RegisterDTO.model';
 import { CategoryDTO2 } from '../models/CategoryDTO2.model';
+import { CheckProductExistDTO } from '../models/CheckProductExistDTO.model';
 
 
 @Injectable({
@@ -46,8 +47,8 @@ export class DatabaseManipulationService {
     return this.httpClient.post(AppSettings.webApiUrl + "Utils/UploadImages/", formData);
   }
 
-  checkIfProductExist(productName: string): Observable<number> {
-    return this.httpClient.get<number>(AppSettings.webApiUrl + "Product/CheckIfProductExits/" + productName);
+  checkIfProductExist(item: CheckProductExistDTO): Observable<number> {
+    return this.httpClient.post<number>(AppSettings.webApiUrl + "Product/CheckIfProductExits/",item);
   }
 
 
@@ -90,8 +91,8 @@ export class DatabaseManipulationService {
     });
   }
 
-  GetAllUsers(): Observable<UserDTO[]> {
-    return this.httpClient.get<UserDTO[]>(AppSettings.webApiUrl + "User/GetAllUsers");
+  GetAllUsers(role : string): Observable<UserDTO[]> {
+    return this.httpClient.get<UserDTO[]>(AppSettings.webApiUrl + "User/GetAllUsers/"+role);
   }
 
 

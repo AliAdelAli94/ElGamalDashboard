@@ -5,36 +5,37 @@ import { DatabaseManipulationService } from 'src/app/services/database-manipulat
 import { NgForm } from '@angular/forms';
 import { DynamicScriptLoaderService } from 'src/app/services/dynamic-script-loader-service.service';
 
-declare var jQuery : any;
-declare var $ : any;
-declare var swal : any;
+declare var jQuery: any;
+declare var $: any;
+declare var swal: any;
 
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.css']
 })
-export class AddUserComponent implements OnInit, AfterViewInit{
+export class AddUserComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('addUserForm') public addUserForm :NgForm
-  currentUser : RegisterDTO = new RegisterDTO();
-  saveForm : boolean = false;
+  @ViewChild('addUserForm') public addUserForm: NgForm
+  currentUser: RegisterDTO = new RegisterDTO();
+  saveForm: boolean = false;
   passwordNotMatchFlag = false;
 
-  constructor( private databaseManipulationService: DatabaseManipulationService, private router: Router,private dynamicScriptLoaderService : DynamicScriptLoaderService) { }
+  constructor(private databaseManipulationService: DatabaseManipulationService, private router: Router, private dynamicScriptLoaderService: DynamicScriptLoaderService) { }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.intializeElements();
   }
 
-  addUser(){
-    
-    this.currentUser.birthDate =  $("#birthDatePicker").val();
+  addUser() {
+
+    this.currentUser.birthDate = $("#birthDatePicker").val();
     this.saveForm = true;
     if (this.currentUser) {
+      this.currentUser.role = "admin";
       this.dynamicScriptLoaderService.showSpinner();
       this.databaseManipulationService.registerUser(this.currentUser).subscribe((response) => {
         if (response == 0) {
@@ -51,10 +52,9 @@ export class AddUserComponent implements OnInit, AfterViewInit{
 
           this.saveForm = false;
           this.addUserForm.reset();
-        
+
         }
-        if(response == 1)
-        {
+        if (response == 1) {
           swal.fire(
             {
               title: "فشل طلبك",
@@ -65,33 +65,31 @@ export class AddUserComponent implements OnInit, AfterViewInit{
             }
           );
         }
-      },()=>{},()=>{
+      }, () => { }, () => {
         this.dynamicScriptLoaderService.hideSpinner();
       })
     }
   }
 
-  checkPasswords(){
-    if(this.currentUser.confirmPassword == this.currentUser.password)
-    {
+  checkPasswords() {
+    if (this.currentUser.confirmPassword == this.currentUser.password) {
       this.passwordNotMatchFlag = false;
     }
-    else
-    {
+    else {
       this.passwordNotMatchFlag = true;
     }
   }
 
-  intializeElements(){
+  intializeElements() {
 
     jQuery('#birthDatePicker').datepicker({
       autoclose: true,
       todayHighlight: true
-  });
+    });
 
   }
 
-  cancel(){
+  cancel() {
     this.router.navigateByUrl('/home/start-page');
   }
 

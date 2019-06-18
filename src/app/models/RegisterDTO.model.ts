@@ -15,4 +15,6 @@ export class RegisterDTO {
     birthDate: string;
 
     confirmPassword : string;
+
+    role : string;
 }

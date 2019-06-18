@@ -78,7 +78,8 @@
                           *</span></label>
                       <div class="col-md-4">
                         <input type="text" class="form-control" name="userConfirmPassword"
-                          [(ngModel)]="currentUser.confirmPassword" #userConfirmPasswordControl="ngModel" (input)="checkPasswords()" required>
+                          [(ngModel)]="currentUser.confirmPassword" #userConfirmPasswordControl="ngModel"
+                          (input)="checkPasswords()" required>
 
                         <ul class="parsley-errors-list filled">
 
@@ -86,9 +87,8 @@
                             *ngIf="userConfirmPasswordControl.errors?.required && (userConfirmPasswordControl.dirty || saveForm == true)">
                             يجب إدخال هذا الحقل</li>
 
-                            <li
-                            *ngIf="passwordNotMatchFlag == true">
-                              الباسورد و تأكيد الباسورد غير متطابقان</li>
+                          <li *ngIf="passwordNotMatchFlag == true">
+                            الباسورد و تأكيد الباسورد غير متطابقان</li>
 
                         </ul>
                       </div>

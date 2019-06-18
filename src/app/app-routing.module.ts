@@ -10,6 +10,7 @@ import { ViewUsersComponent } from './home/view-users/view-users.component';
 import { AddUserComponent } from './home/add-user/add-user.component';
 import { ViewCategoriesComponent } from './home/view-categories/view-categories.component';
 import { AuthGuard } from './auth.guard';
+import { ViewOrdersComponent } from './home/view-orders/view-orders.component';
 
 
 const routes: Routes = [
@@ -36,11 +37,9 @@ const routes: Routes = [
 
       { path: 'add-user', component: AddUserComponent,canActivate: [AuthGuard] },
 
-      { path: 'view-categories', component:ViewCategoriesComponent,canActivate: [AuthGuard]}
+      { path: 'view-categories', component:ViewCategoriesComponent,canActivate: [AuthGuard]},
 
-
-
-
+      { path: 'view-orders', component:ViewOrdersComponent,canActivate: [AuthGuard]}
 
     ]
   },
