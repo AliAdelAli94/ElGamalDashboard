@@ -11,6 +11,8 @@ import { AddUserComponent } from './home/add-user/add-user.component';
 import { ViewCategoriesComponent } from './home/view-categories/view-categories.component';
 import { AuthGuard } from './auth.guard';
 import { ViewOrdersComponent } from './home/view-orders/view-orders.component';
+import { ViewOrderDetailsComponent } from './home/view-order-details/view-order-details.component';
+import { ConfirmOrderComponent } from './home/confirm-order/confirm-order.component';
 
 
 const routes: Routes = [
@@ -39,7 +41,15 @@ const routes: Routes = [
 
       { path: 'view-categories', component:ViewCategoriesComponent,canActivate: [AuthGuard]},
 
-      { path: 'view-orders', component:ViewOrdersComponent,canActivate: [AuthGuard]}
+      { path: 'view-orders', component:ViewOrdersComponent,canActivate: [AuthGuard]},
+
+      { path: 'view-order-details', component:ViewOrderDetailsComponent,canActivate: [AuthGuard]},
+
+      { path: 'confirm-order', component:ConfirmOrderComponent,canActivate: [AuthGuard]}
+
+
+
+      
 
     ]
   },

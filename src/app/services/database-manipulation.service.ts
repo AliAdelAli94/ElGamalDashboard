@@ -9,6 +9,8 @@ import { UserDTO } from '../models/UserDTO.model';
 import { RegisterDTO } from '../models/RegisterDTO.model';
 import { CategoryDTO2 } from '../models/CategoryDTO2.model';
 import { CheckProductExistDTO } from '../models/CheckProductExistDTO.model';
+import { GetOrderDTO } from '../models/GetOrderDTO.model';
+import { OrderDetailsDTO } from '../models/OrderDetailsDTO.model';
 
 
 @Injectable({
@@ -137,8 +139,22 @@ export class DatabaseManipulationService {
     });
   }
 
+  GetOrdersByStatus(): Observable<GetOrderDTO[]> {
+    return this.httpClient.get<GetOrderDTO[]>(AppSettings.webApiUrl + "Order/GetOrdersByStatus");
+  }
+
+  GetOrderDetailsByID(id : string): Observable<OrderDetailsDTO> {
+    return this.httpClient.get<OrderDetailsDTO>(AppSettings.webApiUrl + "Order/GetOrderDetailsByID?id="+id);
+  }
+
   
+  ConfirmOrder(id: string): Observable<any> {
 
-
+    return this.httpClient.post(AppSettings.webApiUrl + "Order/ConfirmOrder?id="+id, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
 
 }

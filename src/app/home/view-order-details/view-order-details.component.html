@@ -1,0 +1,91 @@
+<div class="content-page">
+  <!-- Start content -->
+  <div class="content">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="page-title-box">
+            <h4 class="page-title">تفاصيل الطلب</h4>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card-box">
+
+
+            <div class="row">
+
+              <div class="col-sm-6  col-xs-4">
+                <div class="m-t-30">
+                    <p><small><strong> إسم صاحب الطلب : </strong></small>{{item.userName}}</p>
+                  <p><small><strong>تاريخ الطلب : </strong></small>{{item.date}}</p>
+                  <p><small><strong>الحالة : </strong></small> <span class="label label-success">مكتمل</span></p>
+                  <p><small><strong>كود الطلب : </strong></small>{{item.ID}}</p>
+                </div>
+              </div>
+
+              <div class="col-xs-6 pull-right">
+                <div class="m-t-30">
+                  <p><b>عنوان الشحن</b></p>
+                  <p class="text-muted">{{item.Address}}</p>
+                  <p><small><strong> الهاتف : </strong></small>{{item.Phone}}</p>
+                </div>
+
+              </div>
+            </div>
+            <!-- end row -->
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table m-t-30">
+                    <thead>
+                      <tr>
+                          <th>كود المنتج</th>
+                          <th>الإسم</th>
+                          <th>الوصف</th>
+                          <th>الكمية</th>
+                          <th>سعر الشراء</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr *ngFor="let x of item.OrderDetails">
+                        <td>
+                          {{x.productID}}
+                        </td>
+                        <td><b>{{x.name}}</b></td>
+                        <td>{{x.description}}</td>
+                        <td>{{x.quantity}}</td>
+                        <td>{{x.buyingPrice}} جنيه</td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 col-xs-6 col-md-offset-4">
+                <div class="pull-right">
+                  <p><b>الإجمالي :</b> {{item.total}} جنيه</p>
+                  <p><b>مصاريف الشحن :  </b> {{item.shippingAmount}} جنيه</p>
+                  <h3>{{item.total}} جنيه</h3>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatabaseManipulationService } from 'src/app/services/database-manipulation.service';
-import { EditViewCategoryService } from 'src/app/services/edit-view-category.service';
 import { DynamicScriptLoaderService } from 'src/app/services/dynamic-script-loader-service.service';
-import { CategoryDTO2 } from 'src/app/models/CategoryDTO2.model';
+import { GetOrderDTO } from 'src/app/models/GetOrderDTO.model';
 
 
-declare var swal : any;
-declare var $ : any;
+declare var swal: any;
+declare var $: any;
 
 @Component({
   selector: 'app-view-orders',
@@ -17,20 +16,19 @@ declare var $ : any;
 export class ViewOrdersComponent implements OnInit {
 
   constructor(private router: Router,
-    private databaseManipulationService: DatabaseManipulationService,
-    private editViewCategoryService :EditViewCategoryService,private dynamicScriptLoader : DynamicScriptLoaderService) { }
+    private databaseManipulationService: DatabaseManipulationService, private dynamicScriptLoader: DynamicScriptLoaderService) { }
 
-  categories : CategoryDTO2[] = new Array();
 
   ngOnInit() {
-    this.getAllCategories();
+    this.getAllOrdersByStatus();
   }
 
+  public orders: GetOrderDTO[] = new Array();
 
   intializeUserDatatableConfiguration(instant: any) {
 
-    $("#categoriesTable").length && $("#categoriesTable").DataTable({
-    
+    $("#ordersTable").length && $("#ordersTable").DataTable({
+
       dom: "Bfrtip",
       buttons: [{
         extend: "copy",
@@ -51,16 +49,19 @@ export class ViewOrdersComponent implements OnInit {
         text: "طباعة"
       }],
       responsive: !0,
-      data: this.categories,
+      data: this.orders,
       columns: [
 
-        { data: 'name', title: 'الإسم' },
-        { data: 'parentCategoryName', title: 'داخل قسم' },
+        { data: 'ID', title: 'كود الطلب' },
+        { data: 'total', title: 'الإجمالي' },
+        { data: 'shippingAmount', title: 'مصاريف الشحن' },
+        { data: 'userName', title: 'الإسم' },
+        { data: 'status', title: 'الحالة' },
         {
           data: null,
           className: "center",
           "render": function (data, type, row, meta) {
-            return '<a id="edit_' + data.ID + '" class="on-default category_edit"><i class="fa fa-pencil" style="cursor:pointer"></i></a> &nbsp;&nbsp;&nbsp;&nbsp; <a class="on-default category_delete" id="remove_' + data.ID + '"><i class="fa fa-trash-o"></i></a>'
+            return '<a id="view_' + data.ID + '" class="on-default order_view"><i class="fa fa-eye" style="cursor:pointer"></i></a>';
           }
         }
 
@@ -80,72 +81,32 @@ export class ViewOrdersComponent implements OnInit {
     });
 
 
-    $('#categoriesTable').on('click', 'a.category_edit', (e, id) => {
+    $('#ordersTable').on('click', 'a.order_view', (e, id) => {
 
       e.preventDefault();
       let elementID = e.currentTarget.attributes["id"].value;
-      let categoryID = elementID.split('_')[1];
-      instant.editViewCategoryService.EditedCategory = instant.categories.filter(x => x.ID == categoryID)[0];
-      instant.router.navigate(['/home/edit-category', { id: categoryID }]);
-    });
-
-
-    $('#categoriesTable').on('click', 'a.category_delete', (e, id) => {
-
-      e.preventDefault();
-      let elementID = e.currentTarget.attributes["id"].value;
-      let categoryID = elementID.split('_')[1];
-
-      swal.fire({
-        title: 'هل متأكد من الحذف ؟',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'إلغاء',
-        confirmButtonText: 'حذف'
-      }).then((result) => {
-        if (result.value) {
-          this.dynamicScriptLoader.showSpinner();
-          this.databaseManipulationService.deleteCategory(categoryID).subscribe(response => {
-            if (response == 0) {
-              
-              $("#categoriesTable").dataTable().fnDestroy()
-              instant.getAllCategories();
-
-              swal.fire(
-                {
-                  title: "تم بنجاح",
-                  text: "لقد تم حذف القسم",
-                  type: "success",
-                  confirmButtonColor: '#4fa7f3',
-                  showConfirmButton: false,
-                });
-              }
-          },()=>{},()=>{
-            this.dynamicScriptLoader.hideSpinner();
-          });
-        }
-      });
-
+      let orderID = elementID.split('_')[1];
+      let tempItem = instant.orders.filter(x => x.ID == orderID)[0];
+      if(tempItem.status == "مكتمل"){
+        instant.router.navigate(['/home/view-order-details', { id: orderID }]);
+      }
+      else{
+        instant.router.navigate(['/home/confirm-order', { id: orderID }]);
+      }
     });
 
   }
 
-  getAllCategories() {
-this.dynamicScriptLoader.showSpinner();
-    this.databaseManipulationService.GetAllCategoriesDashboard().subscribe(response => {
+  getAllOrdersByStatus() {
+    this.dynamicScriptLoader.showSpinner();
+    this.databaseManipulationService.GetOrdersByStatus().subscribe(response => {
 
-      this.categories = response;
+      this.orders = response;
       this.intializeUserDatatableConfiguration(this);
 
-    },()=>{},()=>{
+    }, () => { }, () => {
       this.dynamicScriptLoader.hideSpinner();
     });
-  }
-
-  navigateToAddCategory(){
-    this.router.navigate(['/home/add-category']);
   }
 
 }
