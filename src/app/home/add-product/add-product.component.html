@@ -105,11 +105,10 @@
                         <div class="col-md-4">
                           <input type="file" class="form-control" multiple
                             (change)="handleFilesToUpload($event.target.files)" name="productImage" required>
-                            <ul class="parsley-errors-list filled">
-                              <li
-                                *ngIf="fireProductDocumentsFlag == true">
-                                يجب إختيار الصور</li>
-                            </ul>
+                          <ul class="parsley-errors-list filled">
+                            <li *ngIf="fireProductDocumentsFlag == true">
+                              يجب إختيار الصور</li>
+                          </ul>
                         </div>
                       </div>
 
@@ -143,133 +142,72 @@
               <h4 class="m-t-0 header-title"><b>خصائص المنتج</b></h4>
               <br />
 
-              <div class="form-group" *ngIf="showOptionForm == false">
-                <button id="demo-btn-addrow" class="btn btn-default m-b-20" (click)="addNewOption()"><i
-                    class="fa fa-plus m-r-5"></i>إضافة
-                  جديد</button>
+              <div class="form-group">
+                <ckeditor id="editor" [config]="config" [editor]="Editor" name="productOptions" #productOptionsControl="ngModel"
+                  [(ngModel)]="currentProduct.productOptions"></ckeditor>
               </div>
 
-              <form class="form-horizontal" role="form" #addOptionForm="ngForm" *ngIf="showOptionForm == true">
-
-                <div class="row">
-                  <div class="col-md-12">
-
-                    <div class="form-group">
-                      <label class="col-md-2 control-label" for="productOption">الوصف<span class="text-danger">
-                          *</span></label>
-                      <div class="col-md-4">
-                        <textarea type="text" class="form-control" name="productOption" #productOptionControl="ngModel"
-                          required [(ngModel)]="currentOption.optionText"></textarea>
-
-                        <ul class="parsley-errors-list filled">
-                          <li
-                            *ngIf="productOptionControl.errors?.required && (productOptionControl.dirty || saveForm == true)">
-                            يجب إدخال هذا الحقل</li>
-
-                          <li *ngIf="repeatedOptionFlag == true">
-                            هذا الوصف موجود من قبل</li>
-
-                        </ul>
-                      </div>
-                    </div>
-
-
-                    <div class="form-group row">
-                      <div class="col-sm-8 col-sm-offset-5">
-                        <button type="button" class="btn btn-primary waves-effect waves-light"
-                          [disabled]="addOptionForm.invalid" (click)="saveOption(addOptionForm)">حفظ</button>
-
-                        <button class="btn btn-default waves-effect m-l-5" (click)="cancelOption()">
-                          إلغاء
-                        </button>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </form>
-
-
-              <div class="table-responsive" *ngIf="currentProduct.ProductOptions.length > 0">
-                <table class="table m-0 table-colored table-success">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>الوصف</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let option of currentProduct.ProductOptions;let i = index">
-                      <th scope="row">{{i + 1}}</th>
-                      <td class="col-sm-6">{{option.optionText}}</td>
-                      <td>
-                        <button class="demo-delete-row btn btn-danger btn-xs btn-icon fa fa-refresh" (click)="updateOption(i)"></button>
-                        <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times" (click)="deleteOption(i)"></button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
             </div>
 
 
-            <div class="card-box" *ngIf="editableMode == true && currentProduct.Comments.length > 0">
-              <h4 class="m-t-0 header-title"><b>التعليقات و االتقييمات</b></h4>
-              <br />
+          <div class="card-box" *ngIf="editableMode == true && currentProduct.Comments.length > 0">
+            <h4 class="m-t-0 header-title"><b>التعليقات و االتقييمات</b></h4>
+            <br />
 
-              <div class="table-responsive">
-                <table class="table m-0 table-colored table-success">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>التعليق</th>
-                      <th>إسم المستخدم</th>
-                      <th>التقييم</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let comment of currentProduct.Comments;let i = index">
-                      <th scope="row">{{i + 1}}</th>
-                      <td class="col-sm-5">{{comment.commentText}}</td>
-                      <td class="col-sm-3">{{comment.userName}}</td>
-                      <td class="col-sm-2">{{comment.ratingValue}}</td>
-                      <td>
-                        <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times" (click)="deleteComment(i)"></button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div class="table-responsive">
+              <table class="table m-0 table-colored table-success">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>التعليق</th>
+                    <th>إسم المستخدم</th>
+                    <th>التقييم</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let comment of currentProduct.Comments;let i = index">
+                    <th scope="row">{{i + 1}}</th>
+                    <td class="col-sm-5">{{comment.commentText}}</td>
+                    <td class="col-sm-3">{{comment.userName}}</td>
+                    <td class="col-sm-2">{{comment.ratingValue}}</td>
+                    <td>
+                      <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times"
+                        (click)="deleteComment(i)"></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-
-            <div class="card-box">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group row">
-                    <div class="col-sm-8 col-sm-offset-5">
-                      <button type="button" class="btn btn-primary waves-effect waves-light" (click)="(editableMode == true)? editProduct(addProductForm) : saveChanges(addProductForm)"
-                        [disabled]="addProductForm.invalid || (ExistedProductFalg == true) || (fireProductDocumentsFlag == true || currentProduct.images.length == 0)">حفظ</button>
-
-                      <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
-                        إلغاء
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
           </div>
+
+          <div class="card-box">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group row">
+                  <div class="col-sm-8 col-sm-offset-5">
+                    <button type="button" class="btn btn-primary waves-effect waves-light"
+                      (click)="(editableMode == true)? editProduct(addProductForm) : saveChanges(addProductForm)"
+                      [disabled]="addProductForm.invalid || (ExistedProductFalg == true) || (fireProductDocumentsFlag == true || currentProduct.images.length == 0)">حفظ</button>
+
+                    <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
+                      إلغاء
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
         </div>
-
-      </form>
-
-
     </div>
 
+    </form>
+
+
   </div>
-  <app-footer></app-footer>
+
+</div>
+<app-footer></app-footer>
 </div>

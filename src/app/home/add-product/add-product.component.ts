@@ -5,10 +5,11 @@ import { Product } from 'src/app/models/product.model';
 import { Category } from 'src/app/models/category.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Image } from 'src/app/models/image.model';
-import { ProductOption } from 'src/app/models/ProductOption.model';
 import { NgForm } from '@angular/forms';
 import { EditViewProductService } from 'src/app/services/edit-view-product.service';
-import { CheckProductExistDTO } from 'src/app/models/CheckProductExistDTO.model';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import '@ckeditor/ckeditor5-build-classic/build/translations/pt';
+
 
 declare var swal: any;
 
@@ -20,6 +21,11 @@ declare var swal: any;
 })
 export class AddProductComponent implements OnInit, AfterViewInit {
 
+  public Editor = ClassicEditor
+
+  public config = {
+    language: 'ar'
+  };
 
   currentProduct: Product = new Product();
   categories: Category[];
@@ -28,7 +34,6 @@ export class AddProductComponent implements OnInit, AfterViewInit {
   productImagesModel: any;
   ExistedProductFalg: boolean = false;
   showOptionForm: boolean = false;
-  currentOption: ProductOption = new ProductOption();
   saveOptionForm: boolean = false;
   repeatedOptionFlag: boolean = false;
   selectedOptionIndex: number = -1;
@@ -39,9 +44,14 @@ export class AddProductComponent implements OnInit, AfterViewInit {
   fireProductDocumentsFlag: boolean = false;
   imagesUrlsBeforeEdit: string[] = new Array();
 
+  htmlContent : any;
+
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService,
     private databaseManipulationService: DatabaseManipulationService, private router: Router,
-    private activatedRoute: ActivatedRoute, private editViewProductService: EditViewProductService) { }
+    private activatedRoute: ActivatedRoute, private editViewProductService: EditViewProductService) {
+
+      this.htmlContent = "<p>نظام التشغيل:</p><ul><li>نظام التشغيل: MT6580</li><li>معالج الرسومات: Mali 400</li><li>الشريحة: شريحة ميكرو ثنائية</li><li>نظام التشغيل: XOS</li></ul><p>السعة التخزينية</p><ul><li>ذاكرة داخلية: 16 جيجابايت</li><li>رام: 1 جيجابايت</li></ul><p>الشاشة</p><ul><li>حجم الشاشة: 5.0 بوصة عالية الدقة</li><li>الدقة: 1280*720</li></ul><p>الكاميرا:</p><ul><li>الكاميرا الرئيسية: 8 ميجابكسل</li><li>العدسات الأساسية: 3835B-401</li><li>التركيز التلقائي: متاح</li><li>الكاميرا الأساسية: 2 ميجابكسل VCM:GX-2965BF-S</li><li>كشاف</li></ul>";
+  }
 
   ngOnInit() {
 
@@ -66,7 +76,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
     this.dynamicScriptLoader.showSpinner();
     this.databaseManipulationService.getCategories().subscribe(response => {
       this.categories = response;
-    },()=>{},()=>{
+    }, () => { }, () => {
       this.dynamicScriptLoader.hideSpinner();
     });
   }
@@ -106,7 +116,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
           }
 
           this.databaseManipulationService.editProduct(this.currentProduct).subscribe(response => {
-            if(response == 0){
+            if (response == 0) {
               swal.fire(
                 {
                   title: "تم بنجاح",
@@ -122,7 +132,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
               this.saveForm = false;
               this.router.navigateByUrl('/home/view-products');
             }
-          },()=>{},()=>{
+          }, () => { }, () => {
             this.dynamicScriptLoader.hideSpinner();
           });
 
@@ -149,7 +159,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
           this.saveForm = false;
           this.router.navigateByUrl('/home/view-products');
         }
-      },()=>{},()=>{
+      }, () => { }, () => {
         this.dynamicScriptLoader.hideSpinner();
       });
     }
@@ -185,7 +195,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
           this.productImagesModel = null;
           this.saveForm = false;
         }
-      },()=>{},()=>{
+      }, () => { }, () => {
         this.dynamicScriptLoader.hideSpinner();
       });
 
@@ -195,78 +205,19 @@ export class AddProductComponent implements OnInit, AfterViewInit {
   checkIfProductExist() {
     if (this.currentProduct.name) {
       this.dynamicScriptLoader.showSpinner();
-      this.databaseManipulationService.checkIfProductExist({ProductName : this.currentProduct.name}).subscribe(response => {
+      this.databaseManipulationService.checkIfProductExist({ ProductName: this.currentProduct.name }).subscribe(response => {
         if (response == 1) {
           this.ExistedProductFalg = true;
         }
         if (response == 0) {
           this.ExistedProductFalg = false;
         }
-      },()=>{},()=>{
+      }, () => { }, () => {
         this.dynamicScriptLoader.hideSpinner();
       });
     }
   }
 
-
-  addNewOption() {
-    this.showOptionForm = !this.showOptionForm;
-  }
-
-  saveOption(form: NgForm) {
-    if (this.optionEditMode == true) {
-      this.currentProduct.ProductOptions[this.selectedOptionIndex] = JSON.parse(JSON.stringify(this.currentOption));
-      this.optionEditMode = false;
-      this.selectedOptionIndex = -1;
-      form.reset();
-      this.showOptionForm = false;
-    }
-    else {
-      if (this.currentProduct.ProductOptions.filter(x => x.optionText == this.currentOption.optionText).length > 0) {
-        this.repeatedOptionFlag = true;
-      }
-      else {
-        this.repeatedOptionFlag = false;
-        this.currentProduct.ProductOptions.push(JSON.parse(JSON.stringify(this.currentOption)));
-        form.reset();
-        this.showOptionForm = false;
-      }
-    }
-
-  }
-
-  updateOption(index: number) {
-    this.optionEditMode = true;
-    this.selectedOptionIndex = index;
-    this.showOptionForm = true;
-    this.currentOption = JSON.parse(JSON.stringify(this.currentProduct.ProductOptions[index]));
-  }
-
-  deleteOption(index: number) {
-    swal.fire({
-      title: 'هل متأكد من الحذف ؟',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'إلغاء',
-      confirmButtonText: 'حذف'
-    }).then((result) => {
-      if (result.value) {
-
-        this.currentProduct.ProductOptions.splice(index, 1);
-        swal.fire(
-          {
-            title: "تم بنجاح",
-            text: "لقد تم الحذف",
-            type: "success",
-            confirmButtonColor: '#4fa7f3',
-            showConfirmButton: false,
-          }
-        );
-      }
-    });
-  }
 
   deleteComment(index: number) {
     swal.fire({

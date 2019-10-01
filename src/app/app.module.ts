@@ -24,6 +24,7 @@ import { AuthGuard } from './auth.guard';
 import { ViewOrdersComponent } from './home/view-orders/view-orders.component';
 import { ViewOrderDetailsComponent } from './home/view-order-details/view-order-details.component';
 import { ConfirmOrderComponent } from './home/confirm-order/confirm-order.component';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { ConfirmOrderComponent } from './home/confirm-order/confirm-order.compon
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    CKEditorModule,
     FormsModule,
     CookieModule.forRoot()
   ],

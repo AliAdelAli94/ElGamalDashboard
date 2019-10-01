@@ -1,5 +1,4 @@
 import { Image } from './image.model';
-import { ProductOption } from './ProductOption.model';
 import { Comment } from './comment.model';
 
 export class Product {
@@ -20,7 +19,7 @@ export class Product {
 
     images: Image[] = new Array();
 
-    ProductOptions: ProductOption[] = new Array();
+    productOptions: string = "";
 
     Comments: Comment[] = new Array();
 }
