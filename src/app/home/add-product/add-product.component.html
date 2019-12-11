@@ -1,3 +1,8 @@
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+  src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0&appId=1024358774570293&autoLogAppEvents=1"></script>
+
+
 <div class="content-page">
   <!-- Start content -->
   <div class="content">
@@ -15,6 +20,8 @@
       <!-- end row -->
       <form class="form-horizontal" role="form" #addProductForm="ngForm">
 
+
+
         <div class="row">
           <div class="col-sm-12">
             <div class="card-box">
@@ -22,6 +29,20 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="p-20">
+
+                    <div class="fb-share-button" style="float: left"
+                      [attr.data-href]="'http://elgamal.shop/default.aspx/product-details/'  + currentProduct.ID "
+                      data-layout="button" data-size="small">
+
+                      <a target="_blank" style="color: white"
+                        [href]="'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Felgamal.shop%2Fdefault.aspx%2Fproduct-details%2F' + currentProduct.ID + '&amp;src=sdkpreparse'"
+                        class="fb-xfbml-parse-ignore"><span>مشاركة</span> <svg viewBox="0 0 12 12" preserveAspectRatio="xMidYMid meet">
+                            <path class="svg-icon-path"
+                              d="M9.1,0.1V2H8C7.6,2,7.3,2.1,7.1,2.3C7,2.4,6.9,2.7,6.9,3v1.4H9L8.8,6.5H6.9V12H4.7V6.5H2.9V4.4h1.8V2.8 c0-0.9,0.3-1.6,0.7-2.1C6,0.2,6.6,0,7.5,0C8.2,0,8.7,0,9.1,0.1z">
+                            </path>
+                          </svg></a></div>
+
+                    
 
                     <div class="form-group">
                       <label class="col-md-2 control-label" for="productName">إسم المنتج<span class="text-danger">
@@ -143,71 +164,71 @@
               <br />
 
               <div class="form-group">
-                <ckeditor id="editor" [config]="config" [editor]="Editor" name="productOptions" #productOptionsControl="ngModel"
-                  [(ngModel)]="currentProduct.productOptions"></ckeditor>
+                <ckeditor id="editor" [config]="config" [editor]="Editor" name="productOptions"
+                  #productOptionsControl="ngModel" [(ngModel)]="currentProduct.productOptions"></ckeditor>
               </div>
 
             </div>
 
 
-          <div class="card-box" *ngIf="editableMode == true && currentProduct.Comments.length > 0">
-            <h4 class="m-t-0 header-title"><b>التعليقات و االتقييمات</b></h4>
-            <br />
+            <div class="card-box" *ngIf="editableMode == true && currentProduct.Comments.length > 0">
+              <h4 class="m-t-0 header-title"><b>التعليقات و االتقييمات</b></h4>
+              <br />
 
-            <div class="table-responsive">
-              <table class="table m-0 table-colored table-success">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>التعليق</th>
-                    <th>إسم المستخدم</th>
-                    <th>التقييم</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let comment of currentProduct.Comments;let i = index">
-                    <th scope="row">{{i + 1}}</th>
-                    <td class="col-sm-5">{{comment.commentText}}</td>
-                    <td class="col-sm-3">{{comment.userName}}</td>
-                    <td class="col-sm-2">{{comment.ratingValue}}</td>
-                    <td>
-                      <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times"
-                        (click)="deleteComment(i)"></button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table m-0 table-colored table-success">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>التعليق</th>
+                      <th>إسم المستخدم</th>
+                      <th>التقييم</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let comment of currentProduct.Comments;let i = index">
+                      <th scope="row">{{i + 1}}</th>
+                      <td class="col-sm-5">{{comment.commentText}}</td>
+                      <td class="col-sm-3">{{comment.userName}}</td>
+                      <td class="col-sm-2">{{comment.ratingValue}}</td>
+                      <td>
+                        <button class="demo-delete-row m-l-10 btn btn-danger btn-xs btn-icon fa fa-times"
+                          (click)="deleteComment(i)"></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
-          <div class="card-box">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group row">
-                  <div class="col-sm-8 col-sm-offset-5">
-                    <button type="button" class="btn btn-primary waves-effect waves-light"
-                      (click)="(editableMode == true)? editProduct(addProductForm) : saveChanges(addProductForm)"
-                      [disabled]="addProductForm.invalid || (ExistedProductFalg == true) || (fireProductDocumentsFlag == true || currentProduct.images.length == 0)">حفظ</button>
+            <div class="card-box">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group row">
+                    <div class="col-sm-8 col-sm-offset-5">
+                      <button type="button" class="btn btn-primary waves-effect waves-light"
+                        (click)="(editableMode == true)? editProduct(addProductForm) : saveChanges(addProductForm)"
+                        [disabled]="addProductForm.invalid || (ExistedProductFalg == true) || (fireProductDocumentsFlag == true || currentProduct.images.length == 0)">حفظ</button>
 
-                    <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
-                      إلغاء
-                    </button>
+                      <button class="btn btn-default waves-effect m-l-5" (click)="cancel()">
+                        إلغاء
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
+
           </div>
-
-
         </div>
+
+      </form>
+
+
     </div>
 
-    </form>
-
-
   </div>
-
-</div>
-<app-footer></app-footer>
+  <app-footer></app-footer>
 </div>

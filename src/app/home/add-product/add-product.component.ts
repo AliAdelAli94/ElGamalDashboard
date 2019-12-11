@@ -49,8 +49,6 @@ export class AddProductComponent implements OnInit, AfterViewInit {
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService,
     private databaseManipulationService: DatabaseManipulationService, private router: Router,
     private activatedRoute: ActivatedRoute, private editViewProductService: EditViewProductService) {
-
-      this.htmlContent = "<p>نظام التشغيل:</p><ul><li>نظام التشغيل: MT6580</li><li>معالج الرسومات: Mali 400</li><li>الشريحة: شريحة ميكرو ثنائية</li><li>نظام التشغيل: XOS</li></ul><p>السعة التخزينية</p><ul><li>ذاكرة داخلية: 16 جيجابايت</li><li>رام: 1 جيجابايت</li></ul><p>الشاشة</p><ul><li>حجم الشاشة: 5.0 بوصة عالية الدقة</li><li>الدقة: 1280*720</li></ul><p>الكاميرا:</p><ul><li>الكاميرا الرئيسية: 8 ميجابكسل</li><li>العدسات الأساسية: 3835B-401</li><li>التركيز التلقائي: متاح</li><li>الكاميرا الأساسية: 2 ميجابكسل VCM:GX-2965BF-S</li><li>كشاف</li></ul>";
   }
 
   ngOnInit() {
